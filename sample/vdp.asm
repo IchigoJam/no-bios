@@ -5,6 +5,7 @@
   include "ichigojam_font.asm"
 
 init:
+  di
   call screen1
   call set_ichigojam_font
 
@@ -17,9 +18,10 @@ init:
   ld de, 0x2000
   ld bc, 32
   call writevram
+  ei
   
-end:
-  jp end
+loop:
+  jr loop
 
 ; 転送元のネームパターン (ROM)
 buffer:

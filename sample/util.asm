@@ -1,36 +1,19 @@
-change_palette:
-  di
-  ld c, 0x99
-  out [c], a
-  ld a, 17 | 0x80
-  out [c], a
-  ei
-  ld c, 0x9a
-  out [c], b
-  out [c], c
-  ret
-
   ; HL 転送元, DE 転送先, BC サイズ
 writevram:
-  di
-
   LD A, E       ; low 8bit
   OUT [0x99], A
   LD A, D       ; high 6bit + 書き込み指定（bit 6 = 0）
   AND 0x3F
   OR 0x40       ; bit6 = 1: 書き込みモード
   OUT [0x99], A
-
-loop:
+writevram_loop:
   ld a, [hl]
   out [0x98], a
   inc hl
   dec bc
   ld a, b
   or c
-  jp nz, loop ; jrだと分岐時2state遅い
-
-  ei
+  jp nz, writevram_loop ; jrだと分岐時2state遅い
   ret
 
 screen1:
@@ -42,8 +25,6 @@ screen1:
   ; sprite generator table, 3800h, 4000h, 2048
 
   ; VDPレジスタを使って SCREEN1 相当のモードに設定
-  DI
-
   LD C, 0x99
 
   ; レジスタ0: Graphics1モード（SCREEN 1相当）
@@ -110,25 +91,19 @@ screen1:
   ld b, 7 | 0x80 ; レジスタ#7
   out [c], b
 
-
-  EI
-  RET
-
-wait_vdp:
-  ld b, 200
-wait_vdp_loop:
-  djnz wait_vdp_loop
   ret
 
-  ;LD A, 5 ; SCREEN 5 に設定
-  ;CALL 0x005F
-
-
-  ;ld a, 15
-  ;ld b, 0xf0
-  ;ld c, 0x00
-  ;call change_palette
-
+change_palette:
+  di
+  ld c, 0x99
+  out [c], a
+  ld a, 17 | 0x80
+  out [c], a
+  ei
+  ld c, 0x9a
+  out [c], b
+  out [c], c
+  ret
 
 ld_iy_pix macro
   push af
@@ -206,7 +181,6 @@ dec5_loop:
   ret
 div_table:
   dw 10000, 1000, 100, 10, 1
-
 
 ; putbin(DE, A)
 ; A → DEに8桁の2進法文字列を出力

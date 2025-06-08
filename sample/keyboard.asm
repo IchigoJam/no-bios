@@ -9,10 +9,9 @@
 init:
   call screen1
 
-  ld hl, ichigojam_font
-  ld de, 0x0
-  ld bc, 2048
-  call writevram
+  di
+  call set_ichigojam_font
+  ei
 
   call key_init
 
@@ -21,22 +20,13 @@ init:
   ld hl, color
   ld de, 0x2000
   ld bc, 32
+  di
   call writevram
+  ei
 
-  ; init screen
-  ld hl, buffer
-  ld bc, 768
-  ld d, 0
-loop2:
-  ld [hl], d
-  inc d
-  inc hl
-  dec bc
-  ld a, b
-  or c
-  jp nz, loop2
+  call init_screen
 
-end:
+loop:
   ; test
   ;call puttest
   ;call puttest2
@@ -46,8 +36,22 @@ end:
   call putdec5
 
   call putkeys
+  jr loop
 
-  jp end
+init_screen:
+  ; init screen
+  ld hl, buffer
+  ld bc, 768
+  ld d, 0
+init_screen_loop:
+  ld [hl], d
+  inc d
+  inc hl
+  dec bc
+  ld a, b
+  or c
+  jp nz, init_screen_loop
+  ret
 
 puttest:
   ld hl, [counter]
@@ -89,12 +93,12 @@ main_loop:
   djnz main_loop
   ret
 
-; --- 割り込みで呼ばれるハンドラ
+; 割り込みで呼ばれるハンドラ
 vbl_handler:
   push af
   push hl
 
-  in a, [0x99]
+  in a, [0x99] ; reset event
 
   ld hl, counter
   inc [hl]
@@ -115,16 +119,15 @@ vbl_handler_skip:
   pop bc
   pop de
 
-
   pop hl
   pop af
 
-  jp H_TIMI_BACKUP      ; 元の H.TIMI を呼び出す（忘れずに！）
+  call H_TIMI_BACKUP      ; 元の H.TIMI を呼び出す（忘れずに！）
+  ei
+  ret
 
-; --- 初期化ルーチン
+; 割り込みハンドラを設定
 init_vbl_counter:
-  di
-
   ; 旧フックをバックアップ
   ld hl, H_TIMI
   ld de, H_TIMI_BACKUP
@@ -136,8 +139,6 @@ init_vbl_counter:
   ld a, 0xc3
   ld [H_TIMI], a
   ld [H_TIMI + 1], hl
-
-  ei
   ret
 
 color:
