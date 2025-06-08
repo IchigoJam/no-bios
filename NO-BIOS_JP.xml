@@ -18,7 +18,7 @@
       <ROM id="NO-BIOS Main ROM">
         <mem base="0x0000" size="0x4000"/>
         <rom>
-          <sha1>2770c815ffc78b1ac813f7009ebc5185b60a9328</sha1>
+          <sha1>c4d81fd0ed27333f0887ac006ec348b703dbedcd</sha1>
           <filename>no-bios.rom</filename>
         </rom>
       </ROM>

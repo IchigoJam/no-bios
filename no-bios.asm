@@ -2,7 +2,15 @@
 
   org 0x0000
 
+  jp init
+
+  ; VDPポート番号
+  space 0x6 - $
+  db 0x98 ; VDP READ
+  db 0x98 ; VDP WRITE
+
   ; 割り込み禁止
+init:
   di
 
   ; I/O初期化
