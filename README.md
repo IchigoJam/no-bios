@@ -17,6 +17,11 @@ to make no-bios.rom with [ZMA](https://github.com/hra1129/zma)
 zma no-bios.asm no-bios.rom
 ```
 
+set SHA1 on NO-BIOS_JP.xml
+```sh
+deno --allow-read https://code4fukui.github.io/SHA1/cli.js no-bios.rom
+```
+
 ## install to openMSX
 
 install [openMSX](https://openmsx.org/) for macOS
