@@ -53,12 +53,11 @@ screen1:
   ld b, 0x80 | 3 ; レジスタ#3
   OUT [C], B
   
-  ; for MSX2
+  ; カラーテーブル #10 for MSX2
   ;LD B, 0x2000 >> 14          ; 0x2000 >> 14
   ;OUT [C], B
   ;ld b, 0x80 | 10 ; レジスタ#10
   ;OUT [C], B
-
 
   ; パターンジェネレータ #4
   LD B, 0x0000 >> 11    ; 0x0000 >> 11
@@ -72,7 +71,7 @@ screen1:
   LD b, 0x80 | 5        ; レジスタ番号5
   OUT [C], B
 
-  ; for MSX2
+  ; スプライト属性 #11 for MSX2
   ;LD B, 0x1b00 >> 15    ; 0x1b00 >> 15
   ;OUT [C],B
   ;LD b, 0x80 | 11        ; レジスタ番号11
@@ -145,6 +144,13 @@ ld_pde_c macro
   push hl
   ld_hl_de
   ld [hl], c
+  pop hl
+endm
+
+ld_pde_a macro
+  push hl
+  ld_hl_de
+  ld [hl], a
   pop hl
 endm
 
