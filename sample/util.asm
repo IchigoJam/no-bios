@@ -2,7 +2,7 @@
 writevram:
   LD A, E       ; low 8bit
   OUT [0x99], A
-  LD A, D       ; high 6bit + 書き込み指定（bit 6 = 0）
+  LD A, D       ; high 6bit
   AND 0x3F
   OR 0x40       ; bit6 = 1: 書き込みモード
   OUT [0x99], A
@@ -135,6 +135,13 @@ ld_de_hl macro
   pop de
 endm
 
+ld_de_phl macro
+  ld e, [hl]
+  inc hl
+  ld d, [hl]
+  dec hl
+endm
+
 ld_iy_hl macro
   push hl
   pop iy
@@ -158,6 +165,14 @@ add_hl_iy macro
   push de
   push iy
   pop de
+  add hl, de
+  pop de
+endm
+
+add_hl_a macro
+  push de
+  ld e, a
+  ld d, 0
   add hl, de
   pop de
 endm

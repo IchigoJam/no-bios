@@ -54,6 +54,8 @@ sh c.sh keyboard
 - [sample/vdp.asm](sample/vdp.asm) VDPを使って表示するだけ
 - [sample/vsync.asm](sample/vsync.asm) 垂直同期割り込みを使用
 - [sample/keyboard.asm](sample/keyboard.asm) キーボード入力も使用
+- [sample/psg1.asm](sample/psg1.asm) PSG単音
+- [sample/psg2.asm](sample/psg2.asm) PSG単音で音楽再生
 - [sample/psg.asm](sample/psg.asm) PSGドライバー[BGM Driver for MSX](https://github.com/hra1129/bgm_driver)を使用
 
 ## reference
